@@ -1,4 +1,5 @@
 import React from 'react';
+
 export const FileContainer: React.FC<{
   title: string;
   accept: string;
@@ -47,16 +48,6 @@ export const FileContainer: React.FC<{
             accept={accept}
             type='file'
             className='opacity-0 file:mr-4 file:py-2 file:px-4
-
-    
-          
-            
-    
-
-          
-    
-    
-  
             file:rounded-full file:border-0
             file:text-sm file:font-semibold
             file:bg-violet-50 file:text-violet-700

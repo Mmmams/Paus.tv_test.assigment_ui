@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
-import "./App.css";
-import { Modal } from "./components/Modal";
-import Navbar from "./components/Navbar";
-import Navigator from "./navigation/Navigator";
-import { userSelector } from "./redux/slices/userSlice";
-import { paths } from "./constants";
-import { getChainId } from "./utils/utils";
+import './App.css';
+import { Modal } from './components/Modal';
+import Navbar from './components/Navbar';
+import Navigator from './navigation/Navigator';
+import { userSelector } from './redux/slices/userSlice';
+import { paths } from './constants';
+import { getChainId } from './utils/utils';
 
 export interface IVideoMetaData {
   key: string;
@@ -20,7 +20,7 @@ export interface IVideoMetaData {
 }
 
 export default function App() {
-  const [walletAddress, setWalletAddress] = useState<string>("");
+  const [walletAddress, setWalletAddress] = useState<string>('');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [videoMetaData, setVideoMetaData] = useState<IVideoMetaData | {}>({});
   const [chainId, setChainId] = useState<number | null>(null);

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { ethers } from 'ethers';
 import { Button } from '@material-tailwind/react';
 
-import { setUser } from '../redux/slices/userSlice';
-import '../styles.css';
-import { ethers } from 'ethers';
-import { paths } from '../constants';
 import { store } from '../redux/store';
+import { setUser } from '../redux/slices/userSlice';
+import { paths } from '../constants';
+import '../styles.css';
 
 const LoginPage: React.FC<{ setAddress(address: string): void }> = ({
   setAddress,
