@@ -15,6 +15,10 @@ const LoginPage: React.FC<{ setAddress(address: string): void }> = ({
   const [walletAddress, setWalletAddress] = useState<string>('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    requestAccount().then((data) => console.log('data', data));
+  }, []);
+
   const requestAccount = async () => {
     if (window.ethereum) {
       try {
