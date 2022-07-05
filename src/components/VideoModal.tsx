@@ -12,7 +12,7 @@ import {Loader} from './Loader/Loader';
 import {contractGenerator} from '../utils/contractGenerator';
 import '../styles.css';
 
-export const Modal: React.FC<{
+export const VideoModal: React.FC<{
     setShowModal(condition: boolean): void;
     setVideoMetaData(data: IVideoMetaData): void;
 }> = ({setShowModal, setVideoMetaData}) => {

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import './App.css';
-import {Modal} from './components/Modal';
+import {VideoModal} from './components/VideoModal';
 import Navbar from './components/Navbar';
 import Navigator from './navigation/Navigator';
 import {getChainId} from './utils/utils';
@@ -27,7 +27,7 @@ export default function App() {
     return (
         <>
             {showModal ? (
-                <Modal
+                <VideoModal
                     setVideoMetaData={setVideoMetaData}
                     setShowModal={setShowModal}
                 />

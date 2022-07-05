@@ -7,6 +7,7 @@ import {marketplaceAbi, marketplaceAddress, tokenAbi, tokenAddress,} from '../co
 import {userSelector} from '../redux/slices/userSlice';
 import {Loader} from '../components/Loader/Loader';
 import '../styles.css';
+import {TransferModal} from "../components/TransferModal";
 
 const HomePage: React.FC = () => {
     const tokenContract = contractGenerator(tokenAddress, tokenAbi, 'goerli');
@@ -22,6 +23,7 @@ const HomePage: React.FC = () => {
     const [URIs, setURIs] = useState<any>([]);
     const [IDs, setIDs] = useState<any>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [openModal, setOpenModal] = useState<number | string>(0);
 
     const getTotalIDs = async () => {
         return await marketplaceContract.getCurrentId();
@@ -66,6 +68,7 @@ const HomePage: React.FC = () => {
                                 index={IDs[index]}
                                 key={index}
                                 user={userObj.user}
+                                setOpenModal={setOpenModal}
                             />
                         ))
                     ) : (
@@ -77,6 +80,8 @@ const HomePage: React.FC = () => {
                     )}
                 </div>
             )}
+            {openModal ?
+                <TransferModal setOpenModal={setOpenModal} id={openModal} contract={tokenContract}/> : null}
         </>
     );
 };

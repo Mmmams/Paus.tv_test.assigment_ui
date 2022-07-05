@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-
 import axios from 'axios';
 import {Button} from '@material-tailwind/react';
 
@@ -11,7 +10,8 @@ export const ContainerNFT: React.FC<{
     uri: string;
     index: number | string;
     user: unknown;
-}> = ({uri, index, user}) => {
+    setOpenModal(condition: string | number): void;
+}> = ({uri, index, user, setOpenModal}) => {
     let navigate = useNavigate();
     const tokenContract = contractGenerator(tokenAddress, tokenAbi, 'goerli');
     const IPFS_URL = LOCAL_IPFS_NODE_URL;
@@ -24,12 +24,28 @@ export const ContainerNFT: React.FC<{
     const [metaData, setMetaData] = useState<any>(null);
     const [price, setPrice] = useState<null | number | string>(null);
     const [name, setName] = useState<null | string>(null);
+    const [allowance, setAllowance] = useState<boolean>(false);
+
 
     const id = index;
     const amount = 1;
     const data = '0x';
+
+    const logo = metaData
+        ? `${IPFS_URL}/${metaData.image}`
+        : require('../assets/logo.png');
+
     const bought = async () => {
         return await tokenContract.balanceOf(user, id);
+    };
+
+    const buyOrWatchHandler = async () => {
+        if (!allowance) {
+            return await marketplaceContract.buy(id, amount, data, {
+                value: price,
+            });
+        }
+        navigate(`/watch`, {state: JSON.parse(metaData.video)});
     };
 
     const getPrice = async (id: number | string) => {
@@ -42,6 +58,10 @@ export const ContainerNFT: React.FC<{
     };
 
     useEffect(() => {
+        bought().then(data => setAllowance(!!(data.toNumber())))
+    }, [tokenContract])
+
+    useEffect(() => {
         getMetaData(uri);
         getPrice(id).then((data) => setPrice(data.price.toNumber()));
     }, [id]);
@@ -52,19 +72,7 @@ export const ContainerNFT: React.FC<{
         }
     }, [metaData]);
 
-    const buyOrWatchHandler = async () => {
-        const allowance = await bought();
-        if (allowance.toNumber() === 0) {
-            return await marketplaceContract.buy(id, amount, data, {
-                value: price,
-            });
-        }
-        navigate(`/watch`, {state: JSON.parse(metaData.video)});
-    };
 
-    const logo = metaData
-        ? `${IPFS_URL}/${metaData.image}`
-        : require('../assets/logo.png');
     return (
         <div
             className='flex flex-col justify-start items-center px-20 py-14 bg-white rounded-xl my-5 mx-5 h-fit z-10 transition-all ease-in-out duration-300 shadow hover:shadow-2xl hover:shadow-slate-900'>
@@ -77,12 +85,20 @@ export const ContainerNFT: React.FC<{
                     <span className='text-3xs font-bold text-black'>ID {id}</span>
                     <span className='text-3xs font-bold text-black'>{price} WEI</span>
                 </div>
-                <Button
-                    className='rounded-lg bg-indigo-600 px-8 py-3 capitalize transition-all ease-in-out duration-300 hover:scale-105'
-                    onClick={buyOrWatchHandler}
-                >
-                    Buy / Watch
-                </Button>
+                <div className='flex flex-row w-full justify-around'>
+                    <Button
+                        className='rounded-lg bg-indigo-600 px-8 py-3 capitalize transition-all ease-in-out duration-300 hover:scale-105'
+                        onClick={buyOrWatchHandler}
+                    >
+                        Buy / Watch
+                    </Button>
+                    {allowance && <Button
+                        className='rounded-lg bg-orange-600 px-8 py-3 capitalize transition-all ease-in-out duration-300 hover:scale-105'
+                        onClick={() => setOpenModal(id)}
+                    >
+                        Transfer
+                    </Button>}
+                </div>
             </div>
         </div>
     );
